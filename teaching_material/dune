@@ -1,5 +1,6 @@
-(executables
- (names preypredator)
+(executable
+ (name preypredator)
+ (modules preypredator)
  (libraries owl-base owl-ode-base c3 js_of_ocaml) ;owl-plplot)
  (preprocess
   (pps js_of_ocaml-ppx)))
@@ -7,7 +8,7 @@
 (alias
  (name example)
  (deps
-  preypredator.bc.js
-  (source_tree .))
+  index.html
+  preypredator.bc.js)
  ;(action (run open index.html))
  )
