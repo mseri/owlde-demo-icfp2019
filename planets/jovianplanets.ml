@@ -21,6 +21,17 @@ let nbody_np planets =
   done;
   force
 
+let energy planets planetvs =
+  let open Mat in
+  let e = ref @@ sum' ((l2norm_sqr ~axis:1 planetvs) *$ 0.5) in
+  for i = 0 to pred n_particles do
+    let dp = planets - planets.${[[i];[]]} in
+    let dr_sqr = l2norm_sqr ~axis:1 dp in
+    let dr_pow_n32 = 1. $/ max2 (dr_sqr + sqrt dr_sqr) shift in
+    e := !e -. (sum' dr_pow_n32)
+  done;
+  !e
+
 let advance dt (planets, planetevs) =
   let module Leapfrog = Owl_ode.Symplectic.D.Symplectic_Euler in
   let f (planets, _) _ = nbody_np planets in
@@ -30,4 +41,7 @@ let () =
   let n = 200 in
   let dt = 0.01 in
   let state = ref (planets, planetvs) in
-  for _ = 1 to n do state := fst @@ advance dt !state done
+  Printf.printf "%.9f\n" (energy planets planetvs);
+  for _ = 1 to n do state := fst @@ advance dt !state done;
+  let planets, planetevs = !state in
+  Printf.printf "%.9f\n" (energy planets planetvs)
