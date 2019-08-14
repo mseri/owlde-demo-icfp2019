@@ -82,12 +82,13 @@ let planetary_system bodies =
   momenta, positions, masses
 
 let potential masses positions =
-  let r, c = Mat.shape positions in
-  let e = Mat.zeros r c in
+  let e = Mat.zeros 1 15 in
   for i = 0 to Array.length masses - 1 do
     for j = i+1 to Array.length masses - 1 do
-      let dist = Mat.(l2norm' @@ (get_vec i positions) - (get_vec j positions))**3.0 in
-      Mat.set_slice [[];[i*3;i*3+2]] e Mat.(get_slice [[];Stdlib.[i*3;i*3+2]] e - (get_vec i positions) *$ (masses.(i) *. masses.(j)) /$ dist)
+      let dpos = Mat.(get_vec i positions - get_vec j positions) in
+      let dist = Maths.pow Mat.(l2norm' dpos) 3.0 in
+      let cur = Mat.get_slice [[];[i*3;i*3+2]] e in
+      Mat.set_slice [[];[i*3;i*3+2]] e Mat.(cur - dpos *$ (masses.(i) *. masses.(j)) /$ dist)
     done
   done;
   e
@@ -103,7 +104,7 @@ let energy masses momenta positions =
   !e
 
 let advance dt masses (q0,p0) =
-  let module Leapfrog = Owl_ode.Symplectic.D.Symplectic_Euler in
+  let module Leapfrog = Owl_ode.Symplectic.D.Leapfrog in
   let f (q, _ : Mat.mat*Mat.mat) (_:float) = potential masses q in
   Leapfrog.step f ~dt (q0, p0) 0.0
 
@@ -114,4 +115,5 @@ let () =
   Printf.printf "%.9f\n" (energy masses p0 q0);
   let state = ref (q0, p0) in
   for _ = 1 to n do state := fst @@ advance dt masses !state done;
+  let q0, p0 = !state in
   Printf.printf "%.9f\n" (energy masses p0 q0);

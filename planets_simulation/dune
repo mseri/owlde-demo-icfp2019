@@ -10,5 +10,6 @@
 (alias
  (name example)
  (deps jovianplanets.exe nbody.exe))
- ;(action
-  ;(run jovianplanets.exe)))
+
+;(action
+;(run jovianplanets.exe)))
