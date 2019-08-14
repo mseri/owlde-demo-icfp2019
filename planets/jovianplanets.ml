@@ -16,19 +16,18 @@ let nbody_np planets =
     let open Mat in
     let dp = planets - planets.${[[i];[]]} in
     let dr_sqr = l2norm_sqr ~axis:1 dp in
-    let h = dr_sqr + sqrt dr_sqr in
-    let dr_pow_n32 = 1. $/ max2 h shift in
-    force.${[[];[]]}<- force.${[[];[]]} + (neg dp) * dr_pow_n32
+    let dr_pow_n32 = 1. $/ max2 (dr_sqr + sqrt dr_sqr) shift in
+    force.${[[];[]]}<- force.${[[];[]]} - dp * dr_pow_n32
   done;
   force
 
 let advance dt (planets, planetevs) =
   let module Leapfrog = Owl_ode.Symplectic.D.Symplectic_Euler in
-  let f (planets, _ : Mat.mat*Mat.mat) (_:float) = nbody_np planets in
+  let f (planets, _) _ = nbody_np planets in
   Leapfrog.step f ~dt (planets, planetevs) 0.0
 
 let () =
-  let n = 5 in
+  let n = 200 in
   let dt = 0.01 in
   let state = ref (planets, planetvs) in
   for _ = 1 to n do state := fst @@ advance dt !state done
