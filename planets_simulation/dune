@@ -1,11 +1,10 @@
 (executable
-  (name jovianplanets)
-  (modules jovianplanets)
-  (libraries owl owl-ode matplotlib))
+ (name jovianplanets)
+ (modules jovianplanets)
+ (libraries owl owl-ode matplotlib))
 
 (alias
  (name example)
- (deps
-  jovianplanets.exe)
- ;(action (run jovianplanets.exe))
- )
+ (deps jovianplanets.exe)
+ (action
+  (run jovianplanets.exe)))
