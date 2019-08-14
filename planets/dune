@@ -1,0 +1,8 @@
+(executable
+ (name jovianplanets)
+ (modules jovianplanets)
+ (libraries owl owl-ode))
+
+(alias
+ (name example)
+ (deps jovianplanets.exe))
