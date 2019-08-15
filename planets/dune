@@ -1,7 +1,7 @@
 (executable
  (name jovianplanets)
  (modules jovianplanets)
- (libraries owl owl-ode))
+ (libraries owl owl-ode owl-plplot))
 
 (alias
  (name example)
