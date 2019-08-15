@@ -8,6 +8,11 @@
  (modules bench plot)
  (libraries owl owl-ode jovianplanets owl-plplot))
 
+(executable
+ (name bench_pure)
+ (modules bench_pure)
+ (libraries jovianplanets))
+
 (alias
  (name example)
- (deps bench.exe plot.exe))
+ (deps bench_pure.exe bench.exe plot.exe))

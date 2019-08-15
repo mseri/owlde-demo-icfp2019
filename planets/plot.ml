@@ -40,7 +40,7 @@ let get_colors n =
       in go (Owl_plplot.Plot.RGB (r,g,b) :: acc) Stdlib.(idx-1)
   in go [] (n-1) |> Array.of_list
 
-let scale = n_particles/50
+let scale = n_planets/50
 let planets_color = get_colors scale
 
 let () =
@@ -48,7 +48,7 @@ let () =
   let dt = 0.01 in
   let y0 = (planets, planetvs) in
   let tspec = Owl_ode.Types.T1 {t0=0.0; dt; duration=(float_of_int n)*.dt} in
-  let f (planets, _) _ = nbody_np planets in
+  let f (planets, _) _ = nbody_owl planets in
   let _, sol_planets, _ = Owl_ode.(Ode.odeint Symplectic.D.leapfrog f y0 tspec ()) in
   let h = Owl_plplot.Plot.create ~n:1 ~m:3 "planets.png" in
   let spec c = Owl_plplot.Plot.[ c; (*MarkerSize 0.5; Marker "."*) LineWidth 0.5 ] in

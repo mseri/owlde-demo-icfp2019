@@ -10,4 +10,4 @@ let () =
     state := fst @@ advance dt !state;
   done;
   let planets, planetvs = !state in
-  Printf.printf "Error on reference energy: %f\n" @@ abs_float @@ (energy planets planetvs)/.e0
+  Printf.printf "Error on reference energy: %f\n" @@ abs_float (1. -. (energy planets planetvs)/.e0)
