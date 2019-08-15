@@ -44,7 +44,7 @@ let get_colors n =
 
 
 let n_particles = 1000
-let p_colors = get_colors n_particles
+(* let p_colors = get_colors n_particles *)
 
 let planets  = Mat.gaussian n_particles 3
 let planetvs = Mat.zeros n_particles 3
@@ -83,37 +83,36 @@ let () =
   let state = ref (planets, planetvs) in
   Printf.printf "%.9f\n" (energy planets planetvs);
   let h = Owl_plplot.Plot.create ~n:1 ~m:3 "planets.png" in
-  let spec large c = Owl_plplot.Plot.[c; MarkerSize (if large then 1.5 else 0.5); Marker "."] in
-  for _ = 1 to n do
+  (* let spec large c = Owl_plplot.Plot.[c; MarkerSize (if large then 1.5 else 0.5); Marker "."] in *)
+  let spec large = Owl_plplot.Plot.[RGB (25, 25, 25); MarkerSize (if large then 1.5 else 0.5); Marker "."] in
+  for i = 1 to n do
     state := fst @@ advance dt !state;
 
     let planets = fst !state in
-    Array.iteri (fun i c ->
-        let spec = spec (i=n) c in
+    let spec = spec (i=n) in
 
-        let open Owl_plplot.Plot in
+    let open Owl_plplot.Plot in
 
-        subplot h 0 0;
-        set_foreground_color h 0 0 0;
-        set_background_color h 255 255 255;
-        set_xlabel h "x";
-        set_ylabel h "y";
-        scatter ~h ~spec planets.Mat.${[[i];[0]]} planets.Mat.${[[i];[1]]};
+    subplot h 0 0;
+    set_foreground_color h 0 0 0;
+    set_background_color h 255 255 255;
+    set_xlabel h "x";
+    set_ylabel h "y";
+    scatter ~h ~spec planets.Mat.${[[];[0]]} planets.Mat.${[[];[1]]};
 
-        subplot h 1 0;
-        set_foreground_color h 0 0 0;
-        set_background_color h 255 255 255;
-        set_xlabel h "y";
-        set_ylabel h "z";
-        scatter ~h ~spec planets.Mat.${[[i];[1]]} planets.Mat.${[[i];[2]]};
+    subplot h 1 0;
+    set_foreground_color h 0 0 0;
+    set_background_color h 255 255 255;
+    set_xlabel h "y";
+    set_ylabel h "z";
+    scatter ~h ~spec planets.Mat.${[[];[1]]} planets.Mat.${[[];[2]]};
 
-        subplot h 2 0;
-        set_foreground_color h 0 0 0;
-        set_background_color h 255 255 255;
-        set_xlabel h "x";
-        set_ylabel h "z";
-        scatter ~h ~spec planets.Mat.${[[i];[0]]} planets.Mat.${[[i];[2]]};
-      ) p_colors;
+    subplot h 2 0;
+    set_foreground_color h 0 0 0;
+    set_background_color h 255 255 255;
+    set_xlabel h "x";
+    set_ylabel h "z";
+    scatter ~h ~spec planets.Mat.${[[];[0]]} planets.Mat.${[[];[2]]};
   done;
   Owl_plplot.Plot.output h;
   let planets, planetvs = !state in
