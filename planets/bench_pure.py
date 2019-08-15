@@ -17,7 +17,7 @@ planetv = [[0, 0, 0] for x in planet]
 
 
 def nbody(planet, planetv):
-    nSteps = 15 # In the other code these are 200...
+    nSteps = 10 # In the other code these are 200...
     dt = 0.01
     for _ in range(nSteps):
         for i in range(nplanets):
