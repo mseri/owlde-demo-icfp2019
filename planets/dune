@@ -1,8 +1,13 @@
-(executable
+(library
  (name jovianplanets)
  (modules jovianplanets)
- (libraries owl owl-ode owl-plplot))
+ (libraries owl owl-ode))
+
+(executables
+ (names bench plot)
+ (modules bench plot)
+ (libraries owl owl-ode jovianplanets owl-plplot))
 
 (alias
  (name example)
- (deps jovianplanets.exe))
+ (deps bench.exe plot.exe))

@@ -35,6 +35,6 @@ def energy(planets, planetvs):
         e -= np.sum(drPowerN32)
     return e
 
-print(energy(particle, particlev))
+e0 = energy(particle, particlev)
 particle, particlev = nbody_np(particle, particlev)
-print(energy(particle, particlev))
+print(f"Error on reference energy: {abs(energy(particle, particlev)/e0)}")

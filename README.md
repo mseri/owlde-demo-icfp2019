@@ -1,5 +1,28 @@
 # Teaching material
 
+# N-Body problem with a large number of bodies
+
+```
+$ dune build @example --profile=release
+$ bench _build/default/planets/bench.exe
+benchmarking _build/default/planets/bench.exe
+time                 8.340 s    (8.242 s .. 8.439 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 8.282 s    (8.261 s .. 8.312 s)
+std dev              29.18 ms   (9.034 ms .. 38.84 ms)
+variance introduced by outliers: 19% (moderately inflated)
+```
+
+```
+$ bench "python3 planets/bench.py"
+benchmarking python3 planets/bench.py
+time                 9.609 s    (8.724 s .. 11.06 s)
+                     0.997 R²   (0.996 R² .. 1.000 R²)
+mean                 9.763 s    (9.461 s .. 10.19 s)
+std dev              404.1 ms   (175.1 ms .. 521.6 ms)
+variance introduced by outliers: 19% (moderately inflated)
+```
+
 # Minibench
 
 On my laptop
