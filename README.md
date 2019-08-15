@@ -1,4 +1,18 @@
+# Demo material for ICFP 2019 talk
+
+You can build all examples with
+```
+dune build @examples --profile=release
+```
+
 # Teaching material
+
+It has become possible only recently to export jupyter notebooks to interactive html-based widgets by means of `nbinteract` and the `binder` API (see University of California, Berkeley,
+Technical Report No. UCB/EECS-2018-57). However in many courses, we would like to be able to share interactive demonstrations with the students by minimising (or completely removing) the visible code, and by providing something that works out of the box and does not require to install a Mathematica viewer, a python distribution, matlab, ...
+
+If you build the examples, and open `_build/default/teaching_material/index.html` in a browser, you can see an example of this at work.
+
+The javascript included in the page, generates all the content and live-integrates the demonstration. It can be provided to the students as is, even via github pages, and does not require any specific knowledge or hardware to be used.
 
 # N-Body problem with a large number of bodies
 
@@ -13,6 +27,8 @@ std dev              29.18 ms   (9.034 ms .. 38.84 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
+This is, of course, not a real benchmark. The implementations below are more aggressive in reusing memory and mutation, a feature that is planned but not yet supported by `OwlDE`.
+
 ```
 $ bench "python3 planets/bench.py"
 benchmarking python3 planets/bench.py
@@ -23,9 +39,35 @@ std dev              404.1 ms   (175.1 ms .. 521.6 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
+Pure python implementation, only doing 10 iterations (instead of the 200 of the runs above):
+```
+$ bench "python3 planets/bench_pure.py"
+benchmarking python3 planets/bench_pure.py
+time                 7.001 s    (6.913 s .. 7.176 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 7.303 s    (7.171 s .. 7.435 s)
+std dev              169.9 ms   (83.88 ms .. 220.8 ms)
+variance introduced by outliers: 19% (moderately inflated)
+```
+
+A pure OCaml implementation can severely outperform the others though, at least for these "small" dimensional examples.
+```
+$ bench _build/default/planets/bench_pure.exe
+benchmarking _build/default/planets/bench_pure.exe
+time                 998.3 ms   (971.2 ms .. 1.027 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 993.1 ms   (988.8 ms .. 999.3 ms)
+std dev              5.854 ms   (2.102 ms .. 7.500 ms)
+variance introduced by outliers: 19% (moderately inflated)
+```
+
 # Minibench
 
-On my laptop
+Benchmarking different algorithms over an integration of the restricted three body problem.
+In the RK45 case we are comparing an OCaml+Owl implementation with a C implementation, nevertheless the ocaml implementation is doing a good job and is almost as fast as the C implementation.
+In the RK4 case we are comparing OCaml+Owl to python+numpy, in this case we are twice as fast.
+In the LSODA, the underlying FORTRAN library is the same but we are twice as slow. This will be investigated in the future.
+
 ```
 $ dune build @example --profile=release
 $ _build/default/minibench/minibench.exe 
@@ -45,3 +87,5 @@ RK45:	8.65 msec
 RK4:	656 msec
 LSODA:	19.2 msec
 ```
+
+# Adjoint problem and Neural ODE
