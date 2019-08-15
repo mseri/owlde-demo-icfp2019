@@ -3,48 +3,7 @@
     N-Body Simulation." White Paper, Colfax International. *)
 open Owl
 
-module FloatOps = struct
-  let (+), (-), ( * ), (/) = (+.), (-.), ( *. ), (/.)
-end
-
-
-(** Color palette helper *)
-let hsl_to_rgb hue saturation lightness =
-  let open FloatOps in
-  let degrees a = a * Float.pi / 180.0 in
-  let chroma = (1.0 - abs_float (2.0 * lightness - 1.0)) * saturation in
-  let hue = hue / (degrees 60.0) in
-  let x = chroma * (1.0 - abs_float ((mod_float hue 2.) - 1.0)) in
-  let r, g, b = match hue with
-    | hue when hue < 0.0 -> (0.0, 0.0, 0.0)
-    | hue when hue < 1.0 -> (chroma, x, 0.0)
-    | hue when hue < 2.0 -> (x, chroma, 0.0)
-    | hue when hue < 3.0 -> (0.0, chroma, x)
-    | hue when hue < 4.0 -> (0.0, x, chroma)
-    | hue when hue < 5.0 -> (x, 0.0, chroma)
-    | hue when hue < 6.0 -> (chroma, 0.0, x)
-    | _ -> (0.0, 0.0, 0.0)
-  in
-  let m = lightness - chroma / 2.0 in
-  (r + m, g + m, b + m)
-
-let get_colors n =
-  let rec go acc = function
-    | idx when idx < 0 -> acc
-    | idx ->
-      let open FloatOps in
-      let h = 1./.(float_of_int n) in
-      let s = (90.0 +. Random.float 10.)/.100. in
-      let l = (50.0 +. Random.float 10.)/.100. in
-      let r,g,b =
-        hsl_to_rgb h s l 
-        |> fun (r,g,b) -> int_of_float (255.0*r), int_of_float (255.0*g), int_of_float (255.0*b)
-      in go (Owl_plplot.Plot.RGB (r,g,b) :: acc) Stdlib.(idx-1)
-  in go [] (n-1) |> Array.of_list
-
-
 let n_particles = 1000
-(* let p_colors = get_colors n_particles *)
 
 let planets  = Mat.gaussian n_particles 3
 let planetvs = Mat.zeros n_particles 3
