@@ -34,9 +34,9 @@ def nbody(planet, planetv):
                     Fx += dx * drPowerN32
                     Fy += dy * drPowerN32
                     Fz += dz * drPowerN32
-                planetv[i][0] += dt * Fx
-                planetv[i][1] += dt * Fy
-                planetv[i][2] += dt * Fz
+            planetv[i][0] += dt * Fx
+            planetv[i][1] += dt * Fy
+            planetv[i][2] += dt * Fz
         for i in range(nplanets):
             planet[i][0] += planetv[i][0] * dt
             planet[i][1] += planetv[i][1] * dt
