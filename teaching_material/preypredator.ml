@@ -14,7 +14,7 @@ let y0' = D.of_array [| 10.0; 10.0 |] [| 2; 1 |]
 
 let integrate coefficients y0 =
   let open Owl_ode_base in
-  let tspec = Types.T1 { t0 = 0.0; dt = 1E-2; duration = 20.0 } in
+  let tspec = Types.T1 { t0 = 0.0; dt = 1E-2; duration = 40.0 } in
   let model = lotka_volterra coefficients in
   let module Native = Native_generic.Make (Owl_base_dense_ndarray.D) in
   Ode.odeint Native.rk4 model y0 tspec ()
@@ -96,21 +96,33 @@ let plotlv_plotly name ts predator prey =
     val y = Js.array prey
     val xaxis = Js.string "x2"
     val yaxis = Js.string "y2"
+    val showlegend = Js.bool false
   end in
   let predator = object%js
     val mode = Js.string "line"
     val x = ts
     val y = Js.array predator
+    val name = Js.string "Predator"
   end in
   let prey = object%js
     val mode = Js.string "line"
     val x = ts
     val y = Js.array prey
+    val name = Js.string "Prey"
   end in
   let layout = object%js
-    val xaxis = object%js val domain = Js.array [|0.0; 0.7|] end
-    val yaxis2 = object%js val anchor = Js.string "x2" end
-    val xaxis2 = object%js val domain = Js.array [|0.75; 1.0|] end
+    val xaxis = object%js
+      val domain = Js.array [|0.0; 0.7|] 
+      val title = object%js val text = Js.string "Time" end
+    end
+    val yaxis2 = object%js
+      val anchor = Js.string "x2" 
+      val title = object%js val text = Js.string "Prey" end
+    end
+    val xaxis2 = object%js
+      val domain = Js.array [|0.75; 1.0|]
+      val title = object%js val text = Js.string "Predator" end
+    end
   end
   in
   Js.Unsafe.fun_call
