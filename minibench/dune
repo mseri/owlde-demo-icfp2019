@@ -4,5 +4,5 @@
  (libraries owl owl-ode owl-ode-odepack core core_bench))
 
 (alias
- (name example)
+ (name examples)
  (deps minibench.exe))

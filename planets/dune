@@ -14,5 +14,5 @@
  (libraries jovianplanets))
 
 (alias
- (name example)
+ (name examples)
  (deps bench_pure.exe bench.exe plot.exe))
