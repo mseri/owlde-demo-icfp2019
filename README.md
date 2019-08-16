@@ -2,8 +2,13 @@
 
 You can build all examples with
 ```
-dune build @examples --profile=release
+$ opam switch import opam-switches/PICK_ONE
+$ eval $(opam env)
+$ dune build @examples --profile=release
 ```
+
+On osx you may need to set `PKG_CONFIG_PATH=/usr/local/opt/openblas/lib/pkgconfig:/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/`, similarly on some linux distribution.
+
 
 # Teaching material
 
@@ -15,6 +20,7 @@ If you build the examples, and open `_build/default/teaching_material/index.html
 The javascript included in the page, generates all the content and live-integrates the demonstration. It can be provided to the students as is, even via github pages, and does not require any specific knowledge or hardware to be used.
 
 This currently requires the `js` branch of `owl-ode`.
+
 
 # N-Body problem with a large number of bodies
 
