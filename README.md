@@ -19,6 +19,7 @@ This currently requires the `js` branch of `owl-ode`.
 # N-Body problem with a large number of bodies
 
 ```
+# OCaml 4.08.1 + flambda
 $ dune build @example --profile=release
 $ bench _build/default/planets/bench.exe
 benchmarking _build/default/planets/bench.exe
@@ -26,6 +27,15 @@ time                 8.340 s    (8.242 s .. 8.439 s)
                      1.000 R²   (1.000 R² .. 1.000 R²)
 mean                 8.282 s    (8.261 s .. 8.312 s)
 std dev              29.18 ms   (9.034 ms .. 38.84 ms)
+variance introduced by outliers: 19% (moderately inflated)
+
+# OCaml 4.08.1
+$ bench _build/default/planets/bench.exe
+benchmarking _build/default/planets/bench.exe
+time                 10.07 s    (9.419 s .. 11.27 s)
+                     0.998 R²   (0.997 R² .. 1.000 R²)
+mean                 10.28 s    (10.08 s .. 10.52 s)
+std dev              278.6 ms   (113.4 ms .. 352.8 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
@@ -54,12 +64,22 @@ variance introduced by outliers: 19% (moderately inflated)
 
 A pure OCaml implementation can severely outperform the others though, at least for these "small" dimensional examples.
 ```
+# OCaml 4.08.1 + flambda
 $ bench _build/default/planets/bench_pure.exe
 benchmarking _build/default/planets/bench_pure.exe
 time                 998.3 ms   (971.2 ms .. 1.027 s)
                      1.000 R²   (1.000 R² .. 1.000 R²)
 mean                 993.1 ms   (988.8 ms .. 999.3 ms)
 std dev              5.854 ms   (2.102 ms .. 7.500 ms)
+variance introduced by outliers: 19% (moderately inflated)
+
+# OCaml 4.08.1
+$ bench _build/default/planets/bench_pure.exe
+benchmarking _build/default/planets/bench_pure.exe
+time                 983.8 ms   (963.3 ms .. 1.013 s)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 1.004 s    (993.8 ms .. 1.013 s)
+std dev              10.78 ms   (8.465 ms .. 11.81 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
@@ -70,7 +90,8 @@ In the RK45 case we are comparing an OCaml+Owl implementation with a C implement
 In the RK4 case we are comparing OCaml+Owl to python+numpy, in this case we are twice as fast.
 In the LSODA, the underlying FORTRAN library is the same but we are twice as slow. This will be investigated in the future.
 
-```
+``` 
+# OCaml 4.08.1 + flambda
 $ dune build @example --profile=release
 $ _build/default/minibench/minibench.exe 
 Estimated testing time 30s (3 benchmarks x 10s). Change using '-quota'.
@@ -84,6 +105,20 @@ Estimated testing time 30s (3 benchmarks x 10s). Change using '-quota'.
 Benchmarks that take 1ns to 100ms can be estimated precisely. For more reliable 
 estimates, redesign your benchmark to have a shorter execution time.
 
+# OCaml 4.08.1
+$ _build/default/minibench/minibench.exe
+Estimated testing time 30s (3 benchmarks x 10s). Change using '-quota'.
+┌───────┬──────────┬─────────────┬──────────┬──────────┬────────────┐
+│ Name  │ Time/Run │     mWd/Run │ mjWd/Run │ Prom/Run │ Percentage │
+├───────┼──────────┼─────────────┼──────────┼──────────┼────────────┤
+│ RK45  │  11.26ms │    778.47kw │   6.72kw │   5.94kw │      3.38% │
+│ RK4   │ 333.18ms │ 32_062.78kw │ 233.07kw │ 199.07kw │    100.00% │
+│ LSODA │  39.62ms │  5_204.75kw │ 224.58kw │ 190.58kw │     11.89% │
+└───────┴──────────┴─────────────┴──────────┴──────────┴────────────┘
+Benchmarks that take 1ns to 100ms can be estimated precisely. For more reliable 
+estimates, redesign your benchmark to have a shorter execution time.
+
+# Python 3.7.4
 $ python3 minibench/minibench.py
 RK45:	8.65 msec
 RK4:	656 msec
