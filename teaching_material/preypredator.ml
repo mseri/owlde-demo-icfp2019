@@ -20,33 +20,6 @@ let integrate coefficients y0 =
   Ode.odeint Native.rk4 model y0 tspec ()
 
 
-(*
-(* This is how you would plot normally *)
-let () =
-  let open Owl in 
-  let ys, ts = integrate coefficients y0 in
-  let fname = "lv.png" in
-  let open Owl in
-  let open Owl_plplot in
-  Plot.(
-    let h = create ~n:1 ~m:2 fname in
-    set_foreground_color h 0 0 0;
-    set_background_color h 255 255 255;
-    set_title h "Lotka-Volterra evolution";
-    subplot h 0 0;
-    plot ~h ~spec:[ RGB (0, 0, 255); LineStyle 1 ] (Mat.col ts 0) (Mat.col ys 0);
-    plot ~h ~spec:[ RGB (255, 0, 255); LineStyle 1 ] (Mat.col ts 0) (Mat.col ys 1);
-    set_foreground_color h 0 0 0;
-    set_background_color h 255 255 255;
-    legend_on h ~position:NorthEast [| "Prey"; "Predator"; "RK45" |];
-    subplot h 1 0;
-    set_foreground_color h 0 0 0;
-    set_background_color h 255 255 255;
-    plot ~h ~spec:[ RGB (0, 0, 255); LineStyle 1 ] Mat.(col ys 0) Mat.(col ys 1);
-    output h
-  )
-*)
-
 let prepare coefficients y0 =
   let ts, ys = integrate coefficients y0 in
   let to_list arr =
