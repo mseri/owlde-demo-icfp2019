@@ -14,6 +14,8 @@ If you build the examples, and open `_build/default/teaching_material/index.html
 
 The javascript included in the page, generates all the content and live-integrates the demonstration. It can be provided to the students as is, even via github pages, and does not require any specific knowledge or hardware to be used.
 
+This currently requires the `js` branch of `owl-ode`.
+
 # N-Body problem with a large number of bodies
 
 ```
