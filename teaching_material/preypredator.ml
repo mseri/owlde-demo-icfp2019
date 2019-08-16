@@ -17,7 +17,7 @@ let integrate coefficients y0 =
   let tspec = Types.T1 { t0 = 0.0; dt = 1E-2; duration = 20.0 } in
   let model = lotka_volterra coefficients in
   let module Native = Native_generic.Make (Owl_base_dense_ndarray.D) in
-  Ode.odeint Native.euler model y0 tspec ()
+  Ode.odeint Native.rk4 model y0 tspec ()
 
 
 (*
@@ -55,10 +55,10 @@ let prepare coefficients y0 =
     in
     go [] (D.shape arr).(1)
   in
-  let ts = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ts) in
-  let xs = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ys) in
-  let ys = to_list (D.get_slice [ [ 1 ]; [ 0; -1; 10 ] ] ys) in
-  List.combine ts xs, List.combine ts ys
+  let ts = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ts) |> Array.of_list in
+  let xs = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list  in
+  let ys = to_list (D.get_slice [ [ 1 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list  in
+  ts, xs, ys
 
 
 open Js_of_ocaml
@@ -70,9 +70,9 @@ let get_by_id id =
   Js.Opt.get (document##getElementById (Js.string id)) (fun () -> assert false)
 
 
-let plotlv predator prey name =
-  let chart = C3.Line.make ~kind:`XY () |> C3.Line.render ~bindto:name in
-  C3.Line.update
+(* let plotlv predator prey name =
+   let chart = C3.Line.make ~kind:`XY () |> C3.Line.render ~bindto:name in
+   C3.Line.update
     chart
     ~segments:
       [ C3.Segment.make () ~label:"Predator" ~points:predator
@@ -80,11 +80,49 @@ let plotlv predator prey name =
       ]
 
 
+   let plotlvp predatorprey name =
+   let chart = C3.Line.make ~kind:`XY () |> C3.Line.render ~bindto:name in
+   C3.Line.update
+    chart
+    ~segments:
+      [ C3.Segment.make () ~label:"Phase portrait" ~points:predatorprey ] *)
+
+let plotlv_plotly name ts predator prey =
+  let name = Js.string name in
+  let ts = Js.array ts in
+  let predatorprey = object%js
+    val mode = Js.string "line"
+    val x = Js.array predator
+    val y = Js.array prey
+    val xaxis = Js.string "x2"
+    val yaxis = Js.string "y2"
+  end in
+  let predator = object%js
+    val mode = Js.string "line"
+    val x = ts
+    val y = Js.array predator
+  end in
+  let prey = object%js
+    val mode = Js.string "line"
+    val x = ts
+    val y = Js.array prey
+  end in
+  let layout = object%js
+    val xaxis = object%js val domain = Js.array [|0.0; 0.7|] end
+    val yaxis2 = object%js val anchor = Js.string "x2" end
+    val xaxis2 = object%js val domain = Js.array [|0.75; 1.0|] end
+  end
+  in
+  Js.Unsafe.fun_call
+    (Js.Unsafe.js_expr "Plotly.newPlot")
+    [|Js.Unsafe.inject name; Js.Unsafe.inject @@ Js.array [|Js.Unsafe.inject predator; Js.Unsafe.inject prey; Js.Unsafe.inject predatorprey|]; Js.Unsafe.inject @@ layout |]
+  |> ignore
+
 let redrawer (alpha, beta, gamma, delta) =
   let alpha, beta, gamma, delta = ref alpha, ref beta, ref gamma, ref delta in
   let redraw () =
-    let predator', prey' = prepare (!alpha, !beta, !gamma, !delta) y0' in
-    plotlv predator' prey' "#volterralotka1"
+    let ts, predator', prey' = prepare (!alpha, !beta, !gamma, !delta) y0' in
+    plotlv_plotly "volterralotka1" ts predator' prey'
   in
   let assoc value name =
     let input =
@@ -94,12 +132,12 @@ let redrawer (alpha, beta, gamma, delta) =
     in
     input##.value := Js.string (string_of_float !value);
     input##.onchange
-      := Html.handler (fun _ ->
-             (try value := float_of_string (Js.to_string input##.value) with
-             | Invalid_argument _ -> ());
-             input##.value := Js.string (string_of_float !value);
-             redraw ();
-             Js._false)
+    := Html.handler (fun _ ->
+        (try value := float_of_string (Js.to_string input##.value) with
+         | Invalid_argument _ -> ());
+        input##.value := Js.string (string_of_float !value);
+        redraw ();
+        Js._false)
   in
   List.iter
     (fun (n, v) -> assoc v n)
@@ -108,9 +146,9 @@ let redrawer (alpha, beta, gamma, delta) =
 
 
 let _ =
-  let predator, prey = prepare coefficients y0 in
+  let ts, predator, prey = prepare coefficients y0 in
   Dom_html.window##.onload
-    := Dom_html.handler (fun _ ->
-           plotlv predator prey "#volterralotka";
-           redrawer coefficients';
-           Js._true)
+  := Dom_html.handler (fun _ ->
+      plotlv_plotly "volterralotka" ts predator prey;
+      redrawer coefficients';
+      Js._true)
