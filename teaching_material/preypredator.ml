@@ -29,8 +29,8 @@ let prepare coefficients y0 =
     go [] (D.shape arr).(1)
   in
   let ts = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ts) |> Array.of_list in
-  let xs = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list  in
-  let ys = to_list (D.get_slice [ [ 1 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list  in
+  let xs = to_list (D.get_slice [ [ 0 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list in
+  let ys = to_list (D.get_slice [ [ 1 ]; [ 0; -1; 10 ] ] ys) |> Array.of_list in
   ts, xs, ys
 
 
@@ -63,45 +63,89 @@ let get_by_id id =
 let plotlv_plotly name ts predator prey =
   let name = Js.string name in
   let ts = Js.array ts in
-  let predatorprey = object%js
-    val mode = Js.string "line"
-    val x = Js.array predator
-    val y = Js.array prey
-    val xaxis = Js.string "x2"
-    val yaxis = Js.string "y2"
-    val showlegend = Js.bool false
-  end in
-  let predator = object%js
-    val mode = Js.string "line"
-    val x = ts
-    val y = Js.array predator
-    val name = Js.string "Predator"
-  end in
-  let prey = object%js
-    val mode = Js.string "line"
-    val x = ts
-    val y = Js.array prey
-    val name = Js.string "Prey"
-  end in
-  let layout = object%js
-    val xaxis = object%js
-      val domain = Js.array [|0.0; 0.7|] 
-      val title = object%js val text = Js.string "Time" end
+  let predatorprey =
+    object%js
+      val mode = Js.string "line"
+
+      val x = Js.array predator
+
+      val y = Js.array prey
+
+      val xaxis = Js.string "x2"
+
+      val yaxis = Js.string "y2"
+
+      val showlegend = Js.bool false
     end
-    val yaxis2 = object%js
-      val anchor = Js.string "x2" 
-      val title = object%js val text = Js.string "Prey" end
+  in
+  let predator =
+    object%js
+      val mode = Js.string "line"
+
+      val x = ts
+
+      val y = Js.array predator
+
+      val name = Js.string "Predator"
     end
-    val xaxis2 = object%js
-      val domain = Js.array [|0.75; 1.0|]
-      val title = object%js val text = Js.string "Predator" end
+  in
+  let prey =
+    object%js
+      val mode = Js.string "line"
+
+      val x = ts
+
+      val y = Js.array prey
+
+      val name = Js.string "Prey"
     end
-  end
+  in
+  let layout =
+    object%js
+      val xaxis =
+        object%js
+          val domain = Js.array [| 0.0; 0.7 |]
+
+          val title =
+            object%js
+              val text = Js.string "Time"
+            end
+        end
+
+      val yaxis2 =
+        object%js
+          val anchor = Js.string "x2"
+
+          val title =
+            object%js
+              val text = Js.string "Prey"
+            end
+        end
+
+      val xaxis2 =
+        object%js
+          val domain = Js.array [| 0.75; 1.0 |]
+
+          val title =
+            object%js
+              val text = Js.string "Predator"
+            end
+        end
+    end
   in
   Js.Unsafe.fun_call
     (Js.Unsafe.js_expr "Plotly.newPlot")
-    [|Js.Unsafe.inject name; Js.Unsafe.inject @@ Js.array [|Js.Unsafe.inject predator; Js.Unsafe.inject prey; Js.Unsafe.inject predatorprey|]; Js.Unsafe.inject @@ layout |]
+    [| Js.Unsafe.inject name
+     ; Js.Unsafe.inject
+       @@ Js.array
+            [| Js.Unsafe.inject predator
+             ; Js.Unsafe.inject prey
+             ; Js.Unsafe.inject predatorprey
+            |]
+     ; Js.Unsafe.inject @@ layout
+    |]
   |> ignore
+
 
 let redrawer (alpha, beta, gamma, delta) =
   let alpha, beta, gamma, delta = ref alpha, ref beta, ref gamma, ref delta in
@@ -117,12 +161,12 @@ let redrawer (alpha, beta, gamma, delta) =
     in
     input##.value := Js.string (string_of_float !value);
     input##.onchange
-    := Html.handler (fun _ ->
-        (try value := float_of_string (Js.to_string input##.value) with
-         | Invalid_argument _ -> ());
-        input##.value := Js.string (string_of_float !value);
-        redraw ();
-        Js._false)
+      := Html.handler (fun _ ->
+             (try value := float_of_string (Js.to_string input##.value) with
+             | Invalid_argument _ -> ());
+             input##.value := Js.string (string_of_float !value);
+             redraw ();
+             Js._false)
   in
   List.iter
     (fun (n, v) -> assoc v n)
@@ -133,7 +177,7 @@ let redrawer (alpha, beta, gamma, delta) =
 let _ =
   let ts, predator, prey = prepare coefficients y0 in
   Dom_html.window##.onload
-  := Dom_html.handler (fun _ ->
-      plotlv_plotly "volterralotka" ts predator prey;
-      redrawer coefficients';
-      Js._true)
+    := Dom_html.handler (fun _ ->
+           plotlv_plotly "volterralotka" ts predator prey;
+           redrawer coefficients';
+           Js._true)
