@@ -91,3 +91,5 @@ LSODA:	19.2 msec
 ```
 
 # Adjoint problem and Neural ODE
+
+Based on https://github.com/tachukao/adjoint_ode/
