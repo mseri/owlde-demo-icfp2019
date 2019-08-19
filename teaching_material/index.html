@@ -4,23 +4,44 @@
 <head>
   <meta charset="utf-8" />
 
-  <!-- Load plotly.js -->
+  <!-- Allow latex -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css"
+    integrity="sha384-BdGj8xC2eZkQaxoQ8nSLefg4AV4/AwB3Fj+8SUSo7pnKP6Eoy18liIKTPn9oBYNG" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.js"
+    integrity="sha384-JiKN5O8x9Hhs/UE5cT5AAJqieYlOZbGT3CHws/y97o3ty4R7/O5poG9F3JoiOYw1"
+    crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+  <!-- Load plotly.js and chart.xkcd -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="chart.xkcd.js"></script>
   <!-- Our program -->
   <script src="preypredator.bc.js"> </script>
 </head>
 
 <body>
-  <div id="volterralotka"></div>
+  <div>
+    <h2>Non interactive live-computed plot</h2>
+    <div id="volterralotka"></div>
+  </div>
   </br>
   <div>
+    <h2>Interactive plot</h2>
     <div id="volterralotka1"></div>
+    <h2>Interactive plot - xkcd style</h2>
+    <span class="svg"><svg id="volterralotka-xkcd" class="line-chart"></svg></span>
+    <h2>Parameters</h2>
+    <label for="alpha">Preys reproduction rate (\(\alpha\))</label><input id="alpha"></input><br />
+    <label for="beta">Preys death rate (\(\beta\))</label><input id="beta"></input><br />
+    <label for="gamma">Predators reproduction rate (\(\gamma\))</label><input id="gamma"></input><br />
+    <label for="delta">Predatorss death rate (\(\delta\))</label><input id="delta"></input><br />
+    <label for="initial_preys">Inital preys population</label><input id="initial_preys"></input><br />
+    <label for="initial_predators">Initial predators population</label><input id="initial_predators"></input>
   </div>
   <div>
-    <input id="alpha"></input>
-    <input id="beta"></input>
-    <input id="gamma"></input>
-    <input id="delta"></input>
+
   </div>
 </body>
 
