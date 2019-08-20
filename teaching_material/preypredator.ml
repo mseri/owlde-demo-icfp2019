@@ -7,10 +7,10 @@ let lotka_volterra (alpha, beta, gamma, delta) y _t =
   |> fun a -> D.of_array a [| 2; 1 |]
 
 
-let coefficients = 2.0 /. 3.0, 4.0 /. 3.0, 1.0, 1.0
-let y0 = [| 1.5; 1.5 |]
-let coefficients' = 1.1, 0.4, 0.4, 0.1
-let y0' = [| 10.0; 10.0 |]
+let coefficients' = 2.0 /. 3.0, 4.0 /. 3.0, 1.0, 1.0
+let y0' = [| 1.5; 1.5 |]
+let coefficients = 1.1, 0.4, 0.4, 0.1
+let y0 = [| 10.0; 10.0 |]
 
 let integrate coefficients y0 =
   let open Owl_ode_base in
@@ -40,6 +40,15 @@ let _ =
   let open Js_of_ocaml in
   Dom_html.window##.onload
     := Dom_html.handler (fun _ ->
-           Plot_bindings.plotlv_plotly "volterralotka" ts predator prey;
+           let phasedata = Array.make 10 (predator, prey) in
+           for i = 0 to 9 do
+             let ts, predator, prey =
+               prepare
+                 coefficients
+                 [| y0.(0); y0.(1) *. (10.0 -. float_of_int i) /. 10.0 |]
+             in
+             phasedata.(i) <- (predator, prey)
+           done;
+           Plot_bindings.plotlv_plotly "volterralotka" ~phasedata ts predator prey;
            Plot_bindings.redrawer prepare coefficients' y0';
            Js._true)

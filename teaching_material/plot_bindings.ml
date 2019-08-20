@@ -19,7 +19,7 @@ let get_by_selector selector =
       assert false)
 
 
-let plotlv_plotly name ts predator prey =
+let plotlv_plotly name ?phasedata ts predator prey =
   let name = Js.string name in
   let ts = Js.array ts in
   let predatorprey =
@@ -92,15 +92,42 @@ let plotlv_plotly name ts predator prey =
         end
     end
   in
+  let phasedata =
+    match phasedata with
+    | None -> [||]
+    | Some data ->
+      Array.map
+        (fun (predator, prey) ->
+          Js.Unsafe.inject
+          @@ object%js
+               val mode = Js.string "line"
+
+               val x = Js.array predator
+
+               val y = Js.array prey
+
+               val xaxis = Js.string "x2"
+
+               val yaxis = Js.string "y2"
+
+               val showlegend = Js.bool false
+               
+               val name = Js.string (Printf.sprintf "y0 = (%.1f, %.1f)" prey.(0) predator.(0))
+             end)
+        data
+  in
   Js.Unsafe.fun_call
     (Js.Unsafe.js_expr "Plotly.newPlot")
     [| Js.Unsafe.inject name
      ; Js.Unsafe.inject
        @@ Js.array
-            [| Js.Unsafe.inject predator
-             ; Js.Unsafe.inject prey
-             ; Js.Unsafe.inject predatorprey
-            |]
+       @@ Array.concat
+            [ [| Js.Unsafe.inject predator
+               ; Js.Unsafe.inject prey
+               ; Js.Unsafe.inject predatorprey
+              |]
+            ; phasedata
+            ]
      ; Js.Unsafe.inject @@ layout
     |]
   |> ignore
@@ -136,9 +163,8 @@ let plotlv_xkcd svg ts predator prey =
         end
     end
   in
-  new%js xkcd_line svg plot |> ignore
-(*;
-  Js.Unsafe.eval_string {|var svg = chartXkcd.d3.select("svg"); var xAxis = d3.svg.axis().ticks(20); svg.select(".x.axis").call(xAxis);|}*)
+  new%js xkcd_line svg plot
+
 
 let redrawer prepare (alpha, beta, gamma, delta) y0 =
   let alpha, beta, gamma, delta = ref alpha, ref beta, ref gamma, ref delta in

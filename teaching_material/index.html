@@ -17,21 +17,81 @@
   <!-- Load plotly.js and chart.xkcd -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="chart.xkcd.js"></script>
+
   <!-- Our program -->
   <script src="preypredator.bc.js"> </script>
+
+  <style>
+    body {
+      max-width: 800px;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 
 <body>
   <div>
-    <h2>Non interactive live-computed plot</h2>
+    <h1>The Lotka-Volterra equations</h1>
+
+    <p>The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of <em>first-order nonlinear
+        differential equations</em>, frequently used to describe the dynamics of biological systems in which two species
+      interact, one as a predator and the other as prey.</p>
+
+    <p>The populations change through time according to the pair of equations:
+
+      $$
+      {\displaystyle {\begin{aligned}{\frac {dx}{dt}}&=\alpha x-\beta xy,\\{\frac {dy}{dt}}&=\delta xy-\gamma
+      y,\end{aligned}}} {\displaystyle {\begin{aligned}{\frac {dx}{dt}}&=\alpha x-\beta xy,\\{\frac {dy}{dt}}&=\delta
+      xy-\gamma y,\end{aligned}}}
+      $$
+
+      where
+
+      <ul>
+        <li>\(x\) is the number of prey (for example, rabbits);</li>
+        <li>\(y\) is the number of some predator (for example, foxes);</li>
+        <li>\({\displaystyle {\tfrac {dy}{dt}}} {\tfrac {dy}{dt}}\) and \({\displaystyle {\tfrac {dx}{dt}}} {\tfrac
+          {dx}{dt}}\) represent the instantaneous growth rates of the two populations;</li>
+        <li>\(t\) represents time;</li>
+        <li>\(\alpha, \beta, \gamma, \delta \) are positive real parameters describing the interaction of the two
+          species.
+        </li>
+      </ul>
+    </p>
+    <p>
+      The equations have periodic solutions and do not have a simple expression in terms of the usual trigonometric
+      functions, although they are quite tractable.
+    </p>
+  </div>
+  <div>
+    <h2>A simple example</h2>
+    <p>
+      Suppose there are two species of animals, a baboon (prey) and a cheetah (predator). If the initial conditions are
+      10
+      baboons and 10 cheetahs, one can plot the progression of the two species over time; given the parameters that the
+      growth and death rates of baboon are 1.1 and 0.4 while that of cheetahs are 0.1 and 0.4 respectively. The choice
+      of
+      time interval is arbitrary.
+    </p>
+    <p>
+      One may also plot solutions parametrically as orbits in phase space, without representing time, but with one axis
+      representing the number of prey and the other axis representing the number of predators for all times.
+    </p>
+    <p>
+      An aside: These graphs illustrate a serious potential problem with this as a biological model: For this specific
+      choice of parameters, in each cycle, the baboon population is reduced to extremely low numbers, yet recovers
+      (while
+      the cheetah population remains sizeable at the lowest baboon density). In real-life situations, however, chance
+      fluctuations of the discrete numbers of individuals, as well as the family structure and life-cycle of baboons,
+      might cause the baboons to actually go extinct, and, by consequence, the cheetahs as well. This modelling problem
+      has been called the "atto-fox problem", an atto-fox being a notional \(10^{−18}\) of a fox.
+    </p>
     <div id="volterralotka"></div>
   </div>
-  </br>
+  <hr />
   <div>
     <h2>Interactive plot</h2>
     <div id="volterralotka1"></div>
-    <h2>Interactive plot - xkcd style</h2>
-    <span class="svg"><svg id="volterralotka-xkcd" class="line-chart"></svg></span>
     <h2>Parameters</h2>
     <label for="alpha">Preys reproduction rate (\(\alpha\))</label><input id="alpha"></input><br />
     <label for="beta">Preys death rate (\(\beta\))</label><input id="beta"></input><br />
@@ -40,9 +100,12 @@
     <label for="initial_preys">Inital preys population</label><input id="initial_preys"></input><br />
     <label for="initial_predators">Initial predators population</label><input id="initial_predators"></input>
   </div>
-  <div>
-
-  </div>
+  <h2>Interactive plot - xkcd style</h2>
+  <div height="100px"><svg id="volterralotka-xkcd" class="line-chart"></svg></div>
+  <footer>
+    Credits: the material is an adaptation of the english version of the
+    <a href="https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations">Lotka-Volterra Equation Wikipedia page</a>.
+  </footer>
 </body>
 
 </html>
