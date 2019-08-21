@@ -1,7 +1,7 @@
 let n_planets = 1000
 
 (* This is not even equivalent to the original code... *)
-let planets = Array.init n_planets (fun i -> Array.init 3 (fun _ -> Random.float 1.0))
+let planets = Array.init n_planets (fun _ -> Array.init 3 (fun _ -> Random.float 1.0))
 let planetvs = Array.init n_planets (fun _ -> [| 0.0; 0.0; 0.0 |])
 
 let nbody planets planetvs =
