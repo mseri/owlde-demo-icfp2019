@@ -4,6 +4,9 @@
 <head>
   <meta charset="utf-8" />
 
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+    integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+
   <!-- Allow latex -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css"
     integrity="sha384-BdGj8xC2eZkQaxoQ8nSLefg4AV4/AwB3Fj+8SUSo7pnKP6Eoy18liIKTPn9oBYNG" crossorigin="anonymous">
@@ -16,7 +19,7 @@
 
   <!-- Load plotly.js and chart.xkcd -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="chart.xkcd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
 
   <!-- Our program -->
   <script src="preypredator.bc.js"> </script>
@@ -25,6 +28,12 @@
     body {
       max-width: 800px;
       font-size: 1.2em;
+      margin: 2em;
+    }
+
+    input {
+      width: 90px;
+      float: right;
     }
   </style>
 </head>
@@ -40,9 +49,8 @@
     <p>The populations change through time according to the pair of equations:
 
       $$
-      {\displaystyle {\begin{aligned}{\frac {dx}{dt}}&=\alpha x-\beta xy,\\{\frac {dy}{dt}}&=\delta xy-\gamma
-      y,\end{aligned}}} {\displaystyle {\begin{aligned}{\frac {dx}{dt}}&=\alpha x-\beta xy,\\{\frac {dy}{dt}}&=\delta
-      xy-\gamma y,\end{aligned}}}
+      {\left\lbrace\begin{aligned}{\frac {dx}{dt}}&=\alpha x-\beta xy,\; \\{\frac {dy}{dt}}&=\delta xy-\gamma
+      y,\end{aligned}\right.}
       $$
 
       where
@@ -50,7 +58,7 @@
       <ul>
         <li>\(x\) is the number of prey (for example, rabbits);</li>
         <li>\(y\) is the number of some predator (for example, foxes);</li>
-        <li>\({\displaystyle {\tfrac {dy}{dt}}} {\tfrac {dy}{dt}}\) and \({\displaystyle {\tfrac {dx}{dt}}} {\tfrac
+        <li>\({\tfrac {dy}{dt}}\) and \({\tfrac
           {dx}{dt}}\) represent the instantaneous growth rates of the two populations;</li>
         <li>\(t\) represents time;</li>
         <li>\(\alpha, \beta, \gamma, \delta \) are positive real parameters describing the interaction of the two
@@ -77,6 +85,7 @@
       One may also plot solutions parametrically as orbits in phase space, without representing time, but with one axis
       representing the number of prey and the other axis representing the number of predators for all times.
     </p>
+    <div id="volterralotka"></div>
     <p>
       An aside: These graphs illustrate a serious potential problem with this as a biological model: For this specific
       choice of parameters, in each cycle, the baboon population is reduced to extremely low numbers, yet recovers
@@ -86,23 +95,34 @@
       might cause the baboons to actually go extinct, and, by consequence, the cheetahs as well. This modelling problem
       has been called the "atto-fox problem", an atto-fox being a notional \(10^{−18}\) of a fox.
     </p>
-    <div id="volterralotka"></div>
   </div>
   <hr />
   <div>
     <h2>Interactive plot</h2>
     <div id="volterralotka1"></div>
     <h2>Parameters</h2>
-    <label for="alpha">Preys reproduction rate (\(\alpha\))</label><input id="alpha"></input><br />
-    <label for="beta">Preys death rate (\(\beta\))</label><input id="beta"></input><br />
-    <label for="gamma">Predators reproduction rate (\(\gamma\))</label><input id="gamma"></input><br />
-    <label for="delta">Predatorss death rate (\(\delta\))</label><input id="delta"></input><br />
-    <label for="initial_preys">Inital preys population</label><input id="initial_preys"></input><br />
-    <label for="initial_predators">Initial predators population</label><input id="initial_predators"></input>
+    <div style="display:grid; grid-template-columns: 1fr 1px 1fr;">
+      <div style="margin: 0.5em; line-height: 1.8;">
+        <label for="alpha">Preys reproduction rate (\(\alpha\))</label> <input id="alpha"></input><br />
+        <label for="beta">Preys death rate (\(\beta\))</label> <input id="beta"></input><br />
+        <label for="gamma">Predators reproduction rate (\(\gamma\))</label> <input id="gamma"></input><br />
+        <label for="delta">Predatorss death rate (\(\delta\))</label> <input id="delta"></input>
+      </div>  
+      <div style="border: 1px solid grey;"></div>
+      <div style="margin: 0.5em; line-height: 1.8;">
+        <label for="initial_preys">Inital preys population</label> <input id="initial_preys"></input><br />
+        <label for="initial_predators">Initial predators population</label><input id="initial_predators"></input>
+      </div>
+    </div>
   </div>
-  <h2>Interactive plot - xkcd style</h2>
-  <div height="100px"><svg id="volterralotka-xkcd" class="line-chart"></svg></div>
-  <footer>
+  <br />
+  <hr />
+  <div>
+    <h4>Of course one can play with any javascript-based plotting library, and use their favourite style...</h4>
+    <p>In this case we are using <a href="https://github.com/timqian/chart.xkcd">chart.xkcd</a>.</p>
+    <svg id="volterralotka-xkcd" class="line-chart"></svg>
+  </div>
+  <footer style="font-size: 0.8em;">
     Credits: the material is an adaptation of the english version of the
     <a href="https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations">Lotka-Volterra Equation Wikipedia page</a>.
   </footer>

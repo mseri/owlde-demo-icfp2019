@@ -111,8 +111,9 @@ let plotlv_plotly name ?phasedata ts predator prey =
                val yaxis = Js.string "y2"
 
                val showlegend = Js.bool false
-               
-               val name = Js.string (Printf.sprintf "y0 = (%.1f, %.1f)" prey.(0) predator.(0))
+
+               val name =
+                 Js.string (Printf.sprintf "y0 = (%.1f, %.1f)" prey.(0) predator.(0))
              end)
         data
   in
@@ -169,13 +170,11 @@ let plotlv_xkcd svg ts predator prey =
 let redrawer prepare (alpha, beta, gamma, delta) y0 =
   let alpha, beta, gamma, delta = ref alpha, ref beta, ref gamma, ref delta in
   let prey0, predator0 = ref y0.(0), ref y0.(1) in
-  let svg = get_by_id "volterralotka-xkcd" in
   let redraw () =
     let ts, predator', prey' =
       prepare (!alpha, !beta, !gamma, !delta) [| !prey0; !predator0 |]
     in
     plotlv_plotly "volterralotka1" ts predator' prey';
-    plotlv_xkcd svg ts predator' prey' |> ignore
   in
   let assoc value name =
     let input =

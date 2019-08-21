@@ -42,13 +42,16 @@ let _ =
     := Dom_html.handler (fun _ ->
            let phasedata = Array.make 10 (predator, prey) in
            for i = 0 to 9 do
-             let ts, predator, prey =
+             let _ts, predator, prey =
                prepare
                  coefficients
                  [| y0.(0); y0.(1) *. (10.0 -. float_of_int i) /. 10.0 |]
              in
              phasedata.(i) <- (predator, prey)
            done;
-           Plot_bindings.plotlv_plotly "volterralotka" ~phasedata ts predator prey;
-           Plot_bindings.redrawer prepare coefficients' y0';
+           let open Plot_bindings in
+           plotlv_plotly "volterralotka" ~phasedata ts predator prey;
+           let svg = get_by_id "volterralotka-xkcd" in
+           plotlv_xkcd svg ts predator prey |> ignore;
+           redrawer prepare coefficients' y0';
            Js._true)
