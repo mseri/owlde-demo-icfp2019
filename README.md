@@ -24,6 +24,8 @@ This currently requires the `js` branch of `owl-ode`.
 
 # N-Body problem with a large number of bodies
 
+"Benchmark" running for a system with 1000 randomly generated bodies for 200 iterations (unless differently specified).
+
 ```
 # OCaml 4.08.1 + flambda
 $ dune build @example --profile=release
