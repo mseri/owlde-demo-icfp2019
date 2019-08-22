@@ -62,7 +62,7 @@ std dev              404.1 ms   (175.1 ms .. 521.6 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
-Pure python implementation, only doing 10 iterations (instead of the 200 of the runs above):
+Pure python implementation, **only doing 10 iterations** (instead of the 200 of the runs above):
 ```
 $ bench "python3 planets/bench_pure.py"
 benchmarking python3 planets/bench_pure.py
