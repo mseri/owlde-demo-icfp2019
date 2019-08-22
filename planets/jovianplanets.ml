@@ -6,7 +6,7 @@ open Owl
 let n_planets = 1000
 let planets = Mat.gaussian n_planets 3
 let planetvs = Mat.zeros n_planets 3
-let shift = Mat.create n_planets 1 1E-10
+let shift = Mat.of_array [|1E-12|] 1 1
 
 let nbody_owl planets =
   let force = Mat.zeros n_planets 3 in
@@ -22,7 +22,7 @@ let nbody_owl planets =
 
 let energy planets planetvs =
   let open Mat in
-  let e = ref @@ sum' (l2norm_sqr ~axis:1 planetvs *$ 0.5) in
+  let e = ref @@ sum' (l2norm_sqr planetvs) in
   for i = 0 to pred n_planets do
     let dp = planets - planets.${[ [ i ]; [] ]} in
     let dr_sqr = l2norm_sqr ~axis:1 dp in
@@ -33,6 +33,5 @@ let energy planets planetvs =
 
 
 let advance dt (planets, planetevs) =
-  let module Leapfrog = Owl_ode.Symplectic.D.Symplectic_Euler in
   let f (planets, _) _ = nbody_owl planets in
-  Leapfrog.step f ~dt (planets, planetevs) 0.0
+  Owl_ode.Symplectic.D.Symplectic_Euler.step f ~dt (planets, planetevs) 0.0

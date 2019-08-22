@@ -27,7 +27,7 @@ def nbody_np(planet, planetv):
 
 
 def energy(planets, planetvs):
-    e = np.sum(0.5 * np.sum(planetvs ** 2, axis=1))
+    e = 0.5 * np.sum(planetvs ** 2)
     for i in range(nplanets):
         dp = planet - planet[i]
         drSquared = np.sum(dp ** 2, axis=1)
