@@ -24,3 +24,8 @@ setup.log
 
 
 *.install
+
+results/
+.ipynb_checkpoints/
+adjoint_ode
+
