@@ -5,7 +5,7 @@
   (pps js_of_ocaml-ppx)))
 
 (alias
-  (name jsdemo)
-  (deps index.html preypredator.bc.js plotly.min.js chart.xkcd.min.js)
-  (action (run open index.html))
-  )
+ (name jsdemo)
+ (deps index.html preypredator.bc.js plotly.min.js chart.xkcd.min.js)
+ (action
+  (run open index.html)))

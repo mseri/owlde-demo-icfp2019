@@ -10,4 +10,4 @@ let () =
   done;
   let planets, planetvs = !state in
   Printf.printf "Error on reference energy: %f\n"
-  @@ abs_float (1. -. energy planets planetvs /. e0)
+  @@ abs_float (1. -. (energy planets planetvs /. e0))

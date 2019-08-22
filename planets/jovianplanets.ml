@@ -6,7 +6,7 @@ open Owl
 let n_planets = 1000
 let planets = Mat.gaussian n_planets 3
 let planetvs = Mat.zeros n_planets 3
-let shift = Mat.of_array [|1E-12|] 1 1
+let shift = Mat.of_array [| 1E-12 |] 1 1
 
 let nbody_owl planets =
   let force = Mat.zeros n_planets 3 in

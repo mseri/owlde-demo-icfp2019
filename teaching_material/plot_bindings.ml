@@ -174,7 +174,7 @@ let redrawer prepare (alpha, beta, gamma, delta) y0 =
     let ts, predator', prey' =
       prepare (!alpha, !beta, !gamma, !delta) [| !prey0; !predator0 |]
     in
-    plotlv_plotly "volterralotka1" ts predator' prey';
+    plotlv_plotly "volterralotka1" ts predator' prey'
   in
   let assoc value name =
     let input =
