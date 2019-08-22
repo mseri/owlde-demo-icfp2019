@@ -1,12 +1,11 @@
 (executable
  (name preypredator)
- ;(modules preypredator)
  (libraries owl-base owl-ode-base js_of_ocaml)
  (preprocess
   (pps js_of_ocaml-ppx)))
 
 (alias
- (name examples)
- (deps index.html preypredator.bc.js)
- ;(action (run open index.html))
- )
+  (name jsdemo)
+  (deps index.html preypredator.bc.js plotly.min.js chart.xkcd.min.js)
+  (action (run open index.html))
+  )

@@ -18,8 +18,12 @@
     onload="renderMathInElement(document.body);"></script>
 
   <!-- Load plotly.js and chart.xkcd -->
+  <!-- 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+  -->
+  <script src="plotly.min.js"></script>
+  <script src="chart.xkcd.min.js"></script>
 
   <!-- Our program -->
   <script src="preypredator.bc.js"> </script>
@@ -93,7 +97,7 @@
       the cheetah population remains sizeable at the lowest baboon density). In real-life situations, however, chance
       fluctuations of the discrete numbers of individuals, as well as the family structure and life-cycle of baboons,
       might cause the baboons to actually go extinct, and, by consequence, the cheetahs as well. This modelling problem
-      has been called the "atto-fox problem", an atto-fox being a notional \(10^{−18}\) of a fox.
+      has been called the "atto-fox problem", an atto-fox being a notional \(10^{-18}\) of a fox.
     </p>
   </div>
   <hr />
@@ -107,7 +111,7 @@
         <label for="beta">Preys death rate (\(\beta\))</label> <input id="beta"></input><br />
         <label for="gamma">Predators reproduction rate (\(\gamma\))</label> <input id="gamma"></input><br />
         <label for="delta">Predatorss death rate (\(\delta\))</label> <input id="delta"></input>
-      </div>  
+      </div>
       <div style="border: 1px solid grey;"></div>
       <div style="margin: 0.5em; line-height: 1.8;">
         <label for="initial_preys">Inital preys population</label> <input id="initial_preys"></input><br />
