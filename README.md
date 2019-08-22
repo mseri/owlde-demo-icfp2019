@@ -9,17 +9,20 @@ $ dune build @examples --profile=release
 
 On osx you may need to set `PKG_CONFIG_PATH=/usr/local/opt/openblas/lib/pkgconfig:/usr/local/Cellar/libffi/3.2.1/lib/pkgconfig/`, similarly on some linux distribution.
 
+Note that the opam switches do not contain `gp` nor `juplot`.
 
-# Teaching material
 
-It has become possible only recently to export jupyter notebooks to interactive html-based widgets by means of `nbinteract` and the `binder` API (see University of California, Berkeley,
-Technical Report No. UCB/EECS-2018-57). However in many courses, we would like to be able to share interactive demonstrations with the students by minimising (or completely removing) the visible code, and by providing something that works out of the box and does not require to install a Mathematica viewer, a python distribution, matlab, ...
+# Standalone dynamic teaching material
 
-If you build the examples, and open `_build/default/teaching_material/index.html` in a browser, you can see an example of this at work.
+It has become possible only recently to export jupyter notebooks to interactive html-based widgets by means of `nbinteract` and the `binder` API (see University of California, Berkeley, Technical Report No. UCB/EECS-2018-57).
+However in many courses, we would like to be able to share interactive demonstrations with the students by minimising (or completely removing) the visible code, and by providing something that works out of the box and does not require to install a Mathematica viewer, a python distribution, matlab, ...
 
-The javascript included in the page, generates all the content and live-integrates the demonstration. It can be provided to the students as is, even via github pages, and does not require any specific knowledge or hardware to be used.
+If you run `dune build @jsdemo --profile=release` in a browser, you can see an example of this at work.
 
-This currently requires the `js` branch of `owl-ode`.
+The javascript included in the page generates all the content and integrates the demonstration in the browser.
+It can be provided to students as is, via a static websita, and does not require any specific knowledge or hardware to be used.
+
+This currently requires the development branch of `owl-ode`, will be upstreamed in version `0.2.0`.
 
 
 # N-Body problem with a large number of bodies
@@ -50,8 +53,8 @@ variance introduced by outliers: 19% (moderately inflated)
 This is, of course, not a real benchmark. The implementations below are more aggressive in reusing memory and mutation, a feature that is planned but not yet supported by `OwlDE`.
 
 ```
-$ bench "python3 planets/bench.py"
-benchmarking python3 planets/bench.py
+$ bench "python3 planets/bench_numpy.py"
+benchmarking python3 planets/bench_numpy.py
 time                 9.609 s    (8.724 s .. 11.06 s)
                      0.997 R²   (0.996 R² .. 1.000 R²)
 mean                 9.763 s    (9.461 s .. 10.19 s)
@@ -91,12 +94,13 @@ std dev              10.78 ms   (8.465 ms .. 11.81 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
-# Minibench
+# Mini benchmark using the three body problem
 
-Benchmarking different algorithms over an integration of the restricted three body problem.
+This is mini benchmark of different algorithms over an integration of the restricted three body problem.
+
 In the RK45 case we are comparing an OCaml+Owl implementation with a C implementation, nevertheless the ocaml implementation is doing a good job and is almost as fast as the C implementation.
 In the RK4 case we are comparing OCaml+Owl to python+numpy, in this case we are twice as fast.
-In the LSODA, the underlying FORTRAN library is the same but we are twice as slow. This will be investigated in the future.
+In the LSODA case, the underlying FORTRAN library is the same but we are twice as slow. This will be investigated in the future.
 
 ``` 
 # OCaml 4.08.1 + flambda
@@ -136,3 +140,14 @@ LSODA:	19.2 msec
 # Adjoint problem and Neural ODE
 
 Based on https://github.com/tachukao/adjoint_ode/
+
+To replicate the demonstration, clone the repository and execute
+```sh
+dune exec adjoint_ode/examples/initial_value_problem.exe --profile=release
+gnuplot -e 'plot "results/actual_ivp"; pause -1'
+```
+or
+```sh
+dune exec adjoint_ode/examples/params_adjoint.exe --profile=release 
+gnuplot -e 'plot "results/target_pa" using 1:2 w p ps .5 pt 7, "results/target_pa" using 1:3 w p ps .5 pt 7, "results/actual_pa" using 1:2 w p ps 1 pt 1, "results/actual_pa" using 1:3 w p ps 1 pt 1; pause -1'
+```
