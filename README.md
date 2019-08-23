@@ -17,7 +17,7 @@ Note that the opam switches do not contain `gp` nor `juplot`.
 It has become possible only recently to export jupyter notebooks to interactive html-based widgets by means of `nbinteract` and the `binder` API (see University of California, Berkeley, Technical Report No. UCB/EECS-2018-57).
 However in many courses, we would like to be able to share interactive demonstrations with the students by minimising (or completely removing) the visible code, and by providing something that works out of the box and does not require to install a Mathematica viewer, a python distribution, matlab, ...
 
-If you run `dune build @jsdemo --profile=release` in a browser, you can see an example of this at work.
+If you run `dune build @jsdemo --profile=release` in a browser, you can see an example of this at work. Otherwise you can head to http://www.mseri.me/owlde-demo-icfp2019/ where an example of the generated files is published.
 
 The javascript included in the page generates all the content and integrates the demonstration in the browser.
 It can be provided to students as is, via a static websita, and does not require any specific knowledge or hardware to be used.
