@@ -1,8 +1,0 @@
-(executable
- (name minibench)
- (modules minibench)
- (libraries owl owl-ode owl-ode-odepack core core_bench))
-
-(alias
- (name examples)
- (deps minibench.exe))
