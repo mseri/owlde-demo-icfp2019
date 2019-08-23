@@ -22,7 +22,7 @@ If you run `dune build @jsdemo --profile=release` in a browser, you can see an e
 The javascript included in the page generates all the content and integrates the demonstration in the browser.
 It can be provided to students as is, via a static websita, and does not require any specific knowledge or hardware to be used.
 
-This currently requires the development branch of `owl-ode`, will be upstreamed in version `0.2.0`.
+This ~~currently~~ requires ~~the development branch of~~ `owl-ode`~~, will be upstreamed in~~ version `0.2.0`.
 
 
 # N-Body problem with a large number of bodies
