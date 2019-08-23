@@ -135,7 +135,11 @@ let plotlv_plotly name ?phasedata ts predator prey =
 
 
 let plotlv_xkcd svg ts predator prey =
-  let xkcd_line = Js.Unsafe.variable "chartXkcd.Line" in
+  let xkcd_line = Js.Unsafe.variable "chartXkcd.XY" in
+  let xymapper ys = Js.array @@
+    Array.map2 (fun t y ->
+      object%js val x = t val y = y end
+    ) ts ys in
   let plot =
     object%js
       val title = Js.string "Prey-Predator system"
@@ -146,22 +150,29 @@ let plotlv_xkcd svg ts predator prey =
 
       val data =
         object%js
-          val labels = Js.array ts
+          (* val labels = Js.array ts *)
 
           val datasets =
             Js.array
               [| object%js
                    val label = Js.string "Prey"
 
-                   val data = Js.array prey
+                   val data = (xymapper prey)
                  end
                ; object%js
                    val label = Js.string "Predator"
 
-                   val data = Js.array predator
+                   val data = (xymapper predator)
                  end
               |]
         end
+
+      val options= object%js
+      val xTickCount = 6
+      (* val legendPosition = chartXkcd.config.positionType.upLeft, *)
+      val showLine = Js.bool true
+      val dotSize = 0.0
+    end
     end
   in
   new%js xkcd_line svg plot
